@@ -20,14 +20,13 @@ public class Shooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
+       Vector3 mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0f;
 
-        Vector3 rotation = mousePos - transform.position;
+        Vector2 lookDir = mousePos - transform.position;
+        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg ;
 
-        float rotZ = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
-
-        transform.rotation = Quaternion.Euler(0, 0, rotZ);
-
+        transform.rotation = Quaternion.Euler(0, 0, angle + 270);
         if (!canFire)
         {
             timer += Time.deltaTime;

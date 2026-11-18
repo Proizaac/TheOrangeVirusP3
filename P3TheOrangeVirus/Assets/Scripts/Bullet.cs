@@ -14,11 +14,11 @@ public class Bullet : MonoBehaviour
         mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         rb = GetComponent<Rigidbody2D>();
         mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 direction = mousePos - transform.position;
-        Vector3 rotation = mousePos - transform.position;
-        rb.linearVelocity = new Vector2(direction.x, direction.y).normalized * force;
-        float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, rot + 98);
+        mousePos.z = 0f;
+        Vector3 direction = (mousePos - transform.position).normalized;
+        rb.linearVelocity = direction * force;
+        float rot = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, rot + 270);
     }
 
     // Update is called once per frame

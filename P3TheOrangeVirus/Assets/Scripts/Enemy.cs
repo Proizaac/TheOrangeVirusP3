@@ -11,7 +11,7 @@ public class EnemyMovement : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private PlayerAwareness _playerAwareness;
     private Vector2 _targetDirection;
-    
+    private float _changeDirectionCooldown;
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -33,11 +33,28 @@ public class EnemyMovement : MonoBehaviour
     }
     private void UpdateTargetDirection()
     {
-     if (_playerAwareness.AwareOfPlayer)
+        HandleRandomDirectionChange();
+       HandlePlayerTargeting();
+    }
+    private void HandleRandomDirectionChange()
+    {
+        _changeDirectionCooldown -= Time.fixedDeltaTime;
+        if (_changeDirectionCooldown <= 0)
+        {
+            float angleChange = Random.Range(-90f, 90f);
+            Quaternion rotation = Quaternion.AngleAxis(angleChange, transform.forward);
+            _targetDirection = rotation * _targetDirection;
+            _changeDirectionCooldown = Random.Range(1f, 5f);
+        }
+    }
+    private void HandlePlayerTargeting()
+    {
+        if (_playerAwareness.AwareOfPlayer)
         {
             _targetDirection = _playerAwareness.DirectionToPlayer;
         }
     }
+
     private void RotateTowardsPlayer()
     {
      
@@ -47,7 +64,7 @@ public class EnemyMovement : MonoBehaviour
     }
     private void SetVelocity()
     {
-      
         _rigidbody.linearVelocity = _targetDirection * _speed;
     }
+    
 }
